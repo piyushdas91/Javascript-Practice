@@ -1,14 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Javascript Practice</title>
-</head>
-<body>
+    <style>
+      #myDiv {
+        width: 100px;
+        height: 100px;
+        background-color: aquamarine;
+        border: 2px solid black;
+        border-radius: 10px;
+      }
+      .done {
+        text-decoration: line-through;
+      }
+      .conatiner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #log,
+      #state {
+        width: 500px;
+        height: 50px;
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+        font-size: 20px;
+        margin-top: 20px;
+        background-color: #ffa500;
+        border-radius: 10px;
+      }
+      .button-container {
+        display: flex;
+        flex-direction: row;
+      }
+      button {
+        font-size: 20px;
+        padding: 10px 20px;
+        margin-top: 20px;
+        margin-right: 20px;
+      }
+    </style>
+  </head>
+  <body>
     <!-- <script src="index.js"></script> -->
     <!-- <script src="advancedJS.js"></script> -->
-    <script src="objects.js"></script>
-    <h1>Hello</h1>
-</body>
+    <!-- <script src="objects.js"></script> -->
+    <!-- <script src="changeColour.js"></script> -->
+    <!-- <script src="forms.js"></script> -->
+    <!-- <script src="style.js"></script> -->
+    <h1>Javascript Practice - DOM</h1>
+    <!-- Forms -->
+    <h3>Forms</h3>
+    <form id="form" action="" onsubmit="formSubmit()">
+      Your Email Please:
+      <input type="email" id="input" onfocus="onFun()" onblur="ofFun()" />
+      <input type="submit" />
+    </form>
+    <br />
+    <br />
+    <h3>On Click Event - Colour Change</h3>
+    <div
+      id="myDiv"
+      onmouseover="onMouseOver(this)"
+      onmouseout="onMouseOut(this)"
+    ></div>
+    <br />
+    <button onclick="changeColour()">Change Colour</button>
+    <br />
+    <br />
+    <!--window object-->
+    <h3>Window Object</h3>
+    <div id="loc"></div>
+    <br />
+    <br />
+    <!--To-Do List-->
+    <h3>To-Do List</h3>
+    <div>
+      Add Items : <input type="text" id="write" />
+      <ul id="list" style="list-style-type: none"></ul>
+    </div>
+    <br />
+    <br />
+    <!--Key Logger Project-->
+    <div class="conatiner">
+      <h3 style="border: 2px solid black; padding: 2px; border-radius: 10px">
+        KeyLogger
+      </h3>
+      <p>Lets make a keylogger project</p>
+      <div class="button-container">
+        <button id="start-btn">Start Logging Keypress</button>
+        <button id="stop-btn">Stop Logging Keypress</button>
+      </div>
+      <div class="button-container">
+        <div id="log"></div>
+        <div id="state"></div>
+      </div>
+    </div>
+    <script>
+      // Key logger scripts
+      const logDiv = document.getElementById("log");
+      const stateDiv = document.getElementById("state");
+      const startBtn = document.getElementById("start-btn");
+      const stopBtn = document.getElementById("stop-btn");
+      console.log(logDiv, stateDiv, startBtn, stopBtn);
+      startBtn.addEventListener("click", () => {
+        console.log("start button");
+        document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("keyup", handleKeyUp);
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+      });
+
+      stopBtn.addEventListener("click", () => {
+        console.log("stop button");
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+        logDiv.textContent = "";
+        state.textContent = "";
+        stopBtn.disabled = true;
+        startBtn.disabled = false;
+      });
+
+      function handleKeyDown(e) {
+        console.log("key", e.key);
+        logDiv.textContent = `Key ${e.key} pressed down`;
+        stateDiv.textContent = `Key is down`;
+      }
+
+      function handleKeyUp(e) {
+        logDiv.textContent = `Key ${e.key} pressed up`;
+        stateDiv.textContent = `Key is up`;
+      }
+
+      // To-do list
+      let write = document.getElementById("write");
+      let toDoList = document.getElementById("list");
+      write.addEventListener("keyup", function (e) {
+        if (e.key == "Enter") {
+          // console.log(this.value);
+          addToDo(this.value);
+          // toDoList.innerHTML = this.value;
+          this.value = "";
+        }
+      });
+      function addToDo(val) {
+        let list = document.createElement("li");
+        list.innerHTML = `${val}`;
+        toDoList.appendChild(list);
+        list.addEventListener("click", function () {
+          this.classList.toggle("done");
+        });
+        console.log(val);
+      }
+      // colour change
+      function changeColour() {
+        console.log("called");
+        var div = document.getElementById("myDiv");
+        console.log("div", div);
+        div.style.backgroundColor = "beige";
+      }
+      function onMouseOver(div) {
+        div.style.backgroundColor = "blue";
+      }
+      function onMouseOut(div) {
+        div.style.backgroundColor = "purple";
+      }
+
+      // focus and blur
+      let input = document.getElementById("input");
+      console.log("inp", document.getElementById("input"));
+      function onFun() {
+        console.log("focus");
+        input.style.backgroundColor = "blue";
+      }
+
+      function ofFun() {
+        console.log("blur");
+        input.style.backgroundColor = "green";
+      }
+      // form submit
+      function formSubmit() {
+        alert(`${input.value}`);
+      }
+      // window
+      let loc = document.getElementById("loc");
+      loc.innerHTML = window.location.hostname;
+
+      // styles using DOM
+      //   let a = document.querySelector("h3");
+      //   console.log("selected", a);
+      //   a.style.color = "aquamarine";
+    </script>
+  </body>
 </html>
